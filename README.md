@@ -13,6 +13,12 @@ This lab demonstrates how to deploy and configure Azure Front Door integrated wi
 - Azure CLI installed and logged in.
 - Appropriate Azure subscription permissions.
 
+## Components
+
+- **Azure Front Door**: A global, scalable entry point for your web applications.
+- **Private Link Service**: A service that enables private connectivity to Azure services and customer-owned services.
+- **Backend Services**: The services that will be accessed through Azure Front Door.
+
 ## Deployment Steps
 
 1. **Login to Azure CLI**:
