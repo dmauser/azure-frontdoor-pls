@@ -26,19 +26,13 @@ read -p "Enter a username for the VMs: " username
 while [[ -z $username ]]; do
     read -p "Username cannot be empty. Please enter a username for the VMs: " username
 done
-read -s -p "Enter a password for the VMs: " password
-while [[ -z $password ]]; do
-    read -s -p "Password cannot be empty. Please enter a password for the VMs: " password
-done
-
-read -s -p "Confirm the password: " password_confirm
-while [[ $password != $password_confirm ]]; do
-    echo "Passwords do not match. Please try again."
-    read -s -p "Enter a password for the VMs: " password
-    while [[ -z $password ]]; do
-        read -s -p "Password cannot be empty. Please enter a password for the VMs: " password
-    done
-    read -s -p "Confirm the password: " password_confirm
+while true; do
+  read -s -p "Enter your password: " password
+  echo
+  read -s -p "Confirm your password: " password_confirm
+  echo
+  [ "$password" = "$password_confirm" ] && break
+  echo "Passwords do not match. Please try again."
 done
 
 # Create Resource Groups
@@ -71,8 +65,8 @@ az network bastion create --resource-group $resourcegroup1 --name $bastion1 --pu
 az network public-ip create --resource-group $resourcegroup2 --name "bastionip-$region2" --sku standard --location $region2 -none
 az network bastion create --resource-group $resourcegroup2 --name $bastion2 --public-ip-address "bastionip-$region2" --vnet-name $vnet2 --location $region2 &>/dev/null &
 
-# create private link service for each vm
-az network lb create --resource-group $resourcegroup1 --name "pls-lb-$region1" --location $region1 --sku standard --frontend-ip-name "frontend" --backend-pool-name "backendpool" -o none
+# Create LB for VM1
+az network lb create --resource-group $resourcegroup1 --name "pls-lb-$region1" --location $region1 --sku standard --frontend-ip-name "frontend" --backend-pool-name "backendpool" --vnet-name $vnet1 --subnet $subnet1 -o none
 az network lb probe create --resource-group $resourcegroup1 --lb-name "pls-lb-$region1" --name "http-probe" --protocol tcp --port 80 -o none
 az network lb rule create --resource-group $resourcegroup1 --lb-name "pls-lb-$region1" --name "http-rule" --protocol tcp --frontend-port 80 --backend-port 80 --frontend-ip-name "frontend" --backend-pool-name "backendpool" --probe-name "http-probe" -o none
 az network nic ip-config address-pool add --resource-group $resourcegroup1 --nic-name "${vm1}VMNic" --lb-name "pls-lb-$region1" --address-pool "backendpool" --ip-config-name "ipconfig${vm1}" -o none
@@ -81,18 +75,19 @@ az network nic ip-config address-pool add --resource-group $resourcegroup1 --nic
 az network vnet subnet create --resource-group $resourcegroup1 --vnet-name $vnet1 --name "pls-subnet-$region1" --address-prefixes 10.0.2.0/24 --private-link-service-network-policies Disabled -o none
 az network private-link-service create --resource-group $resourcegroup1 --name $pls1 --vnet-name $vnet1 --subnet pls-subnet-$region1 --lb-name "pls-lb-$region1" -o none --lb-frontend-ip-configs "frontend" --visibility "*"
 
-az network lb create --resource-group $resourcegroup1 --name "pls-lb-$region1" --location $region1 --sku standard --frontend-ip-name "frontend" --backend-pool-name "backendpool" -o none
-az network lb probe create --resource-group $resourcegroup1 --lb-name "pls-lb-$region1" --name "http-probe" --protocol tcp --port 80 -o none
-az network lb rule create --resource-group $resourcegroup1 --lb-name "pls-lb-$region1" --name "http-rule" --protocol tcp --frontend-port 80 --backend-port 80 --frontend-ip-name "frontend" --backend-pool-name "backendpool" --probe-name "http-probe" -o none
-az network nic ip-config address-pool add --resource-group $resourcegroup1 --nic-name "${vm1}VMNic" --lb-name "pls-lb-$region1" --address-pool "backendpool" --ip-config-name "ipconfig${vm1}" -o none
+# Create LB for VM2
+az network lb create --resource-group $resourcegroup2 --name "pls-lb-$region2" --location $region2 --sku standard --frontend-ip-name "frontend" --backend-pool-name "backendpool" --vnet-name $vnet2 --subnet $subnet2 -o none
+az network lb probe create --resource-group $resourcegroup2 --lb-name "pls-lb-$region2" --name "http-probe" --protocol tcp --port 80 -o none
+az network lb rule create --resource-group $resourcegroup2 --lb-name "pls-lb-$region2" --name "http-rule" --protocol tcp --frontend-port 80 --backend-port 80 --frontend-ip-name "frontend" --backend-pool-name "backendpool" --probe-name "http-probe" -o none
+az network nic ip-config address-pool add --resource-group $resourcegroup2 --nic-name "${vm2}VMNic" --lb-name "pls-lb-$region2" --address-pool "backendpool" --ip-config-name "ipconfig${vm2}" -o none
 
 # Private Link Service for VM2
 az network vnet subnet create --resource-group $resourcegroup2 --vnet-name $vnet2 --name "pls-subnet-$region2" --address-prefixes 10.1.2.0/24 --private-link-service-network-policies Disabled -o none	
 az network private-link-service create --resource-group $resourcegroup2 --name $pls2 --vnet-name $vnet2 --subnet pls-subnet-$region2 --lb-name "pls-lb-$region2" -o none --lb-frontend-ip-configs "frontend" --visibility "*"
 
 # Install IIS on both VMs using run-command extension and also add a page to the default website with the hostname
-az vm run-command invoke --command-id RunPowerShellScript --name $vm1 --resource-group $resourcegroup1 --scripts "Install-WindowsFeature -name Web-Server -IncludeManagementTools; \$computerName = \$env:COMPUTERNAME; Set-Content -Path 'C:\inetpub\wwwroot\index.html' -Value \$computerName -Force"
-az vm run-command invoke --command-id RunPowerShellScript --name $vm2 --resource-group $resourcegroup2 --scripts "Install-WindowsFeature -name Web-Server -IncludeManagementTools; \$computerName = \$env:COMPUTERNAME; Set-Content -Path 'C:\inetpub\wwwroot\index.html' -Value \$computerName -Force"
+az vm run-command invoke --command-id RunPowerShellScript --name $vm1 --resource-group $resourcegroup1 --scripts "Install-WindowsFeature -name Web-Server -IncludeManagementTools; \$computerName = \$env:COMPUTERNAME; Set-Content -Path 'C:\inetpub\wwwroot\index.html' -Value \$computerName -Force" --no-wait
+az vm run-command invoke --command-id RunPowerShellScript --name $vm2 --resource-group $resourcegroup2 --scripts "Install-WindowsFeature -name Web-Server -IncludeManagementTools; \$computerName = \$env:COMPUTERNAME; Set-Content -Path 'C:\inetpub\wwwroot\index.html' -Value \$computerName -Force" --no-wait
 
 # Deploy azure front door
 az afd profile create --resource-group $resourcegroup1 --profile-name $afd --sku premium_azurefrontdoor -o none
