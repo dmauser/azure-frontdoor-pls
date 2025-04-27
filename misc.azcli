@@ -1,0 +1,56 @@
+# For each private link service, get the private endpoint connection status
+echo "Getting private endpoint connection status for each private link service..."
+az network private-link-service list --resource-group $resourcegroup1 --query "[].{Name:name, ID:id}" -o tsv | while read -r name id; do
+    echo "Private Link Service: $name"
+    az network private-link-service show --name "$name" --resource-group "$resourcegroup1" --query "privateEndpointConnections[].{Name:name, Status:privateLinkServiceConnectionState.status}" -o table
+done
+az network private-link-service list --resource-group $resourcegroup2 --query "[].{Name:name, ID:id}" -o tsv | while read -r name id; do
+    echo "Private Link Service: $name"
+    az network private-link-service show --name "$name" --resource-group "$resourcegroup2" --query "privateEndpointConnections[].{Name:name, Status:privateLinkServiceConnectionState.status}" -o table
+done
+
+
+# For each private link service, get the private endpoint connection status and resource ID
+echo "Getting private endpoint connection status and resource ID for each private link service..."
+az network private-link-service list --resource-group $resourcegroup1 --query "[].{Name:name, ID:id}" -o tsv | while read -r name id; do
+    echo "Private Link Service: $name"
+    az network private-link-service show --name "$name" --resource-group "$resourcegroup1" --query "privateEndpointConnections[].{Name:name, Status:privateLinkServiceConnectionState.status, ResourceID:id}" -o table
+done
+az network private-link-service list --resource-group $resourcegroup2 --query "[].{Name:name, ID:id}" -o tsv | while read -r name id; do
+    echo "Private Link Service: $name"
+    az network private-link-service show --name "$name" --resource-group "$resourcegroup2" --query "privateEndpointConnections[].{Name:name, Status:privateLinkServiceConnectionState.status, ResourceID:id}" -o table
+done
+
+
+#!/bin/bash
+
+# Infinite loop
+while true; do
+  # Make the curl request (no keep-alive)
+  content=$(curl -s --no-keepalive "http://endpoint3-fta4deadb9fvfpcg.b02.azurefd.net")
+
+  # Extract color and text using regex (grep/sed)
+  color=$(echo "$content" | sed -n "s/.*<body style='color:\([^;]*\);'>.*/\1/p")
+  text=$(echo "$content" | sed -n "s/.*<body style='color:[^;]*;'>\([^<]*\)<\/body>.*/\1/p")
+
+  # Map color to terminal ANSI color codes
+  case "${color,,}" in
+    red)
+      consoleColor="\033[31m" # Red
+      ;;
+    blue)
+      consoleColor="\033[34m" # Blue
+      ;;
+    *)
+      consoleColor="\033[37m" # Default White
+      ;;
+  esac
+
+  # Print the text in the color
+  echo -e "${consoleColor}${text}\033[0m"
+
+  # Wait 5 seconds
+  sleep 5
+done
+
+
