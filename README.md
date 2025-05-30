@@ -6,18 +6,18 @@ This lab demonstrates how to deploy and configure Azure Front Door integrated wi
 
 - Deploy Azure resources using Azure CLI.
 - Configure Azure Front Door with Private Link Service.
-- Validate secure connectivity through Azure Front Door to backend services.
+- Validate connectivity through Azure Front Door to backend services.
+- This lab deploy Azure Front Door with Private Link Service (PLS) accessing to Azure Windows Virtual Machines in separated regions.
 
 ## Prerequisites
 
-- Azure CLI installed and logged in.
+- Azure CLI installed (Linux) and logged in.
+    - You can also use the Azure Cloud Shell available in the Azure portal.
 - Appropriate Azure subscription permissions.
 
-## Components
+## Network Diagram
 
-- **Azure Front Door**: A global, scalable entry point for your web applications.
-- **Private Link Service**: A service that enables private connectivity to Azure services and customer-owned services.
-- **Backend Services**: The services that will be accessed through Azure Front Door.
+![Network Diagram](https://raw.githubusercontent.com/dmauser/azure-frontdoor-pls/refs/heads/main/media/network-diagram.png)
 
 ## Deployment Steps
 
@@ -38,8 +38,8 @@ bash deploy.sh
 ```
 
 ## Validation
-
 After deployment, verify connectivity and configuration by accessing your backend services securely through Azure Front Door.
+You can leverage the script [validation.sh]() which include some validation steps.
 
 ## Cleanup
 
@@ -47,5 +47,3 @@ To remove all resources created by this lab, delete the resource group:
 ```bash
 az group delete --name "<resource-group-name>" --yes --no-wait
 ```
-
-Replace placeholders (e.g., `<your-subscription-id>`, `<resource-group-name>`) with your actual values.
