@@ -8,6 +8,7 @@ This lab demonstrates how to deploy and configure Azure Front Door integrated wi
 - Configure Azure Front Door with Private Link Service.
 - Validate connectivity through Azure Front Door to backend services.
 - This lab deploy Azure Front Door with Private Link Service (PLS) accessing to Azure Windows Virtual Machines in separated regions.
+- Note that this lab only works with HTTP (not HTTPS), you need to configure your DNS domain and also add commercial SSL certificate to the Windows VMs to enable HTTPS.
 
 ## Prerequisites
 
@@ -39,7 +40,7 @@ bash deploy.sh
 
 ## Validation
 After deployment, verify connectivity and configuration by accessing your backend services securely through Azure Front Door.
-You can leverage the script [validation.sh]() which include some validation steps.
+You can leverage the script [validation.sh](https://raw.githubusercontent.com/dmauser/azure-frontdoor-pls/refs/heads/main/validations.sh) which include some validation steps.
 
 ## Cleanup
 

@@ -27,10 +27,10 @@ afdfqdn=$(az afd endpoint show --resource-group $resourcegroup1 --profile-name $
 echo http://$afdfqdn
 #!/bin/bash
 
-# Infinite loop
+# Infinite loop script to test connectivity to Azure Front Door
 while true; do
   # Make the curl request (no keep-alive)
-  content=$(curl -s --no-keepalive "http://$afdfqdn") ### <==== Replace with your actual URL ####
+  content=$(curl -s --no-keepalive "http://$afdfqdn") 
 
   # Extract color and text using regex (grep/sed)
   color=$(echo "$content" | sed -n "s/.*<body style='color:\([^;]*\);'>.*/\1/p")
