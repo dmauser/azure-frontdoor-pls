@@ -45,6 +45,9 @@ You can leverage the script [validation.sh](https://raw.githubusercontent.com/dm
 Output example when running the loop script included in `validations.sh`:
 ![](./media/validation-ouput.png)
 
+**Special note**, check the origin health metric before running the validation script, it should be healthy as shown below:
+![](./media/origin-health.png)
+
 ## Cleanup
 
 To remove all resources created by this lab, delete the resource group:
