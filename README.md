@@ -42,6 +42,9 @@ bash deploy.sh
 After deployment, verify connectivity and configuration by accessing your backend services securely through Azure Front Door.
 You can leverage the script [validation.sh](https://raw.githubusercontent.com/dmauser/azure-frontdoor-pls/refs/heads/main/validations.sh) which include some validation steps.
 
+Output example when running the loop script included in `validations.sh`:
+![](https://raw.githubusercontent.com/dmauser/azure-frontdoor-pls/refs/heads/main/media/validation-output.png)
+
 ## Cleanup
 
 To remove all resources created by this lab, delete the resource group:
