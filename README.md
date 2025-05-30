@@ -33,6 +33,7 @@ az account set --subscription "<your-subscription-id>"
 
 3. **Run the deployment script**:
 ```bash
+curl -sS -O https://raw.githubusercontent.com/dmauser/azure-frontdoor-pls/refs/heads/main/deploy.sh
 bash deploy.sh
 ```
 

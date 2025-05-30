@@ -74,7 +74,7 @@ echo "Creating Azure Bastion..."
 az network public-ip create --resource-group $resourcegroup1 --name "bastionip-$region1" --sku standard --location $region1 -o none
 az network bastion create --resource-group $resourcegroup1 --name $bastion1 --public-ip-address "bastionip-$region1" --vnet-name $vnet1 --location $region1 &>/dev/null &
 
-az network public-ip create --resource-group $resourcegroup2 --name "bastionip-$region2" --sku standard --location $region2 -none
+az network public-ip create --resource-group $resourcegroup2 --name "bastionip-$region2" --sku standard --location $region2 -o none
 az network bastion create --resource-group $resourcegroup2 --name $bastion2 --public-ip-address "bastionip-$region2" --vnet-name $vnet2 --location $region2 &>/dev/null &
 
 # Create LB for VM1
