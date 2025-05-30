@@ -1,4 +1,4 @@
-# Azure Front Door Private Link Service Lab
+# Azure Front Door and Private Link Service Lab
 
 This lab demonstrates how to deploy and configure Azure Front Door integrated with Azure Private Link Service (PLS). The provided `deploy.sh` script automates the deployment process, including resource creation and configuration.
 
