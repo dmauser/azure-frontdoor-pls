@@ -22,12 +22,25 @@ az network private-link-service list --resource-group $resourcegroup2 --query "[
 done
 
 
+# Update origin group with different latencies
+# 50 milliseconds additional latency
+az afd origin-group update --resource-group $resourcegroup1 --profile-name $afd \
+--origin-group-name "origingroup1" --probe-request-type get --probe-protocol http \
+--probe-interval-in-seconds 60 -o none --sample-size 4 --successful-samples-required 3 \
+--additional-latency-in-milliseconds 50
+
+# 0 milliseconds additional latency
+az afd origin-group update --resource-group $resourcegroup1 --profile-name $afd \
+--origin-group-name "origingroup1" --probe-request-type get --probe-protocol http \
+--probe-interval-in-seconds 60 -o none --sample-size 4 --successful-samples-required 3 \
+--additional-latency-in-milliseconds 0
+
 #!/bin/bash
 
 # Infinite loop
 while true; do
   # Make the curl request (no keep-alive)
-  content=$(curl -s --no-keepalive "http://endpoint3-fta4deadb9fvfpcg.b02.azurefd.net")
+  content=$(curl -s --no-keepalive "http://endpoint1-chcha9axexeqh0hf.b02.azurefd.net/")
 
   # Extract color and text using regex (grep/sed)
   color=$(echo "$content" | sed -n "s/.*<body style='color:\([^;]*\);'>.*/\1/p")

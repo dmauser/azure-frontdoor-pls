@@ -103,11 +103,6 @@ az network private-link-service create --resource-group $resourcegroup2 --name $
 
 # Install IIS on both VMs using run-command extension and also add a page to the default website with the hostname
 echo "Installing IIS on both VMs..."
-az vm run-command invoke --command-id RunPowerShellScript --name $vm1 --resource-group $resourcegroup1 --scripts "Install-WindowsFeature -name Web-Server -IncludeManagementTools; \$computerName = \$env:COMPUTERNAME; Set-Content -Path 'C:\inetpub\wwwroot\index.html' -Value \$computerName -Force" --no-wait
-az vm run-command invoke --command-id RunPowerShellScript --name $vm2 --resource-group $resourcegroup2 --scripts "Install-WindowsFeature -name Web-Server -IncludeManagementTools; \$computerName = \$env:COMPUTERNAME; Set-Content -Path 'C:\inetpub\wwwroot\index.html' -Value \$computerName -Force" --no-wait
-
-
-echo "Installing IIS on both VMs..."
 az vm run-command invoke --command-id RunPowerShellScript --name $vm1 --resource-group $resourcegroup1 --scripts "Install-WindowsFeature -name Web-Server -IncludeManagementTools; \$computerName = \$env:COMPUTERNAME; Set-Content -Path 'C:\inetpub\wwwroot\index.html' -Value \"<html><body style='color:blue;'>\$computerName</body></html>\" -Force" --no-wait
 az vm run-command invoke --command-id RunPowerShellScript --name $vm2 --resource-group $resourcegroup2 --scripts "Install-WindowsFeature -name Web-Server -IncludeManagementTools; \$computerName = \$env:COMPUTERNAME; Set-Content -Path 'C:\inetpub\wwwroot\index.html' -Value \"<html><body style='color:red;'>\$computerName</body></html>\" -Force" --no-wait
 
@@ -126,7 +121,7 @@ az afd origin create --resource-group $resourcegroup1 --profile-name $afd --orig
 
 # Create Front Door endpoint
 echo "Creating Front Door endpoint..."
-az afd endpoint create --resource-group $resourcegroup1 --endpoint-name endpoint1 --profile-name $afd --enabled-state Enabled
+az afd endpoint create --resource-group $resourcegroup1 --endpoint-name endpoint1 --profile-name $afd --enabled-state Enabled -o none
 
 # Add routing rule
 echo "Creating routing rule for Azure Front Door..."
