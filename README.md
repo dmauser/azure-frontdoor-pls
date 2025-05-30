@@ -18,7 +18,7 @@ This lab demonstrates how to deploy and configure Azure Front Door integrated wi
 
 ## Network Diagram
 
-![Network Diagram](https://raw.githubusercontent.com/dmauser/azure-frontdoor-pls/refs/heads/main/media/network-diagram.png)
+![Network Diagram](./media/network-diagram.png)
 
 ## Deployment Steps
 
@@ -43,7 +43,7 @@ After deployment, verify connectivity and configuration by accessing your backen
 You can leverage the script [validation.sh](https://raw.githubusercontent.com/dmauser/azure-frontdoor-pls/refs/heads/main/validations.sh) which include some validation steps.
 
 Output example when running the loop script included in `validations.sh`:
-![](https://raw.githubusercontent.com/dmauser/azure-frontdoor-pls/refs/heads/main/media/validation-output.png)
+![](./media/validation-ouput.png)
 
 ## Cleanup
 
