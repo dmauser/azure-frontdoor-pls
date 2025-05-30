@@ -109,7 +109,7 @@ az vm run-command invoke --command-id RunPowerShellScript --name $vm2 --resource
 # Deploy azure front door
 echo "Creating Azure Front Door..."
 az afd profile create --resource-group $resourcegroup1 --profile-name $afd --sku premium_azurefrontdoor -o none
-az afd origin-group create --resource-group $resourcegroup1 --profile-name $afd --origin-group-name "origingroup1" --probe-request-type get --probe-protocol http --probe-interval-in-seconds 60 -o none --sample-size 4 --successful-samples-required 3 --additional-latency-in-milliseconds 50
+az afd origin-group create --resource-group $resourcegroup1 --profile-name $afd --origin-group-name "origingroup1" --probe-request-type get --probe-protocol http --probe-interval-in-seconds 60 -o none --sample-size 4 --successful-samples-required 3 --additional-latency-in-milliseconds 100
 
 # add backends using private link services
 # get private link service alias

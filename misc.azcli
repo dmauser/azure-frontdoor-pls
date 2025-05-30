@@ -40,7 +40,7 @@ az afd origin-group update --resource-group $resourcegroup1 --profile-name $afd 
 # Infinite loop
 while true; do
   # Make the curl request (no keep-alive)
-  content=$(curl -s --no-keepalive "http://endpoint1-chcha9axexeqh0hf.b02.azurefd.net/")
+  content=$(curl -s --no-keepalive "http://endpoint1-akhre0dnewbge4h9.z02.azurefd.net/")
 
   # Extract color and text using regex (grep/sed)
   color=$(echo "$content" | sed -n "s/.*<body style='color:\([^;]*\);'>.*/\1/p")
