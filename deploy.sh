@@ -36,7 +36,7 @@ afd="frontdoor-lab"
 bastionsubnet="azurebastionsubnet"
 bastion1="bastion-$region1"
 bastion2="bastion-$region2"
-vmsize="Standard_D2s_v5"
+vmsize="Standard_DS2_v2"
 
 # Adding script starting time and finish time
 start=`date +%s`
